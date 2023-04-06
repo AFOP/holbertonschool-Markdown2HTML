@@ -15,11 +15,18 @@ Otherwise, print nothing and exit 0
 def markdown_to_html(markdown_str):
     html_str = ""
     in_list = False
+    in_olist = False
     for line in markdown_str.split("\n"):
         if line.startswith("-"):
             if not in_list:
                 html_str += "<ul>\n"
                 in_list = True
+            li_content = line[2:].strip()
+            html_str += f"\t<li>{li_content}</li>\n"
+        elif line.startswith("*"):
+            if not in_olist:
+                html_str += "<ol>\n"
+                in_olist = True
             li_content = line[2:].strip()
             html_str += f"\t<li>{li_content}</li>\n"
         elif line.startswith("#"):
@@ -29,6 +36,9 @@ def markdown_to_html(markdown_str):
             if in_list:
                 html_str += "</ul>\n"
                 in_list = False
+            elif in_olist:
+                html_str += "</ul>\n"
+                in_olist = False
             html_str += line
     return html_str
 
