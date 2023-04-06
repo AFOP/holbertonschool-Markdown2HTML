@@ -12,30 +12,45 @@ If the Markdown file doesn’t exist:
 print in STDER Missing <filename> and exit 1
 Otherwise, print nothing and exit 0
 """
+def md5_lowercase(content):
+    md5 = hashlib.md5(content.encode('utf-8')).hexdigest()
+    return md5.lower()
+
 def markdown_to_html(markdown_str):
     html_str = ""
     in_list = False
     in_olist = False
     is_text = False
     for line in markdown_str.split("\n"):
-        line_bold = ""
         if "**" in line:
+            line_aux = ""
             while "**" in line:
-                line_bold += line[:line.index("**")] + "<b>"
+                line_aux += line[:line.index("**")] + "<b>"
                 line = line[line.index("**")+2:]
-                line_bold += line[:line.index("**")] + "</b>"
+                line_aux += line[:line.index("**")] + "</b>"
                 line = line[line.index("**")+2:]
-            line_bold += line + ""
-            line = line_bold
+            line_aux += line + ""
+            line = line_aux
         if "__" in line:
-                line_bold = ""
+                line_aux = ""
                 while "__" in line:
-                    line_bold += line[:line.index("__")] + "<em>"
+                    line_aux += line[:line.index("__")] + "<em>"
                     line = line[line.index("__")+2:]
-                    line_bold += line[:line.index("__")] + "</em>"
+                    line_aux += line[:line.index("__")] + "</em>"
                     line = line[line.index("__")+2:]
-                line_bold += line + ""
-                line = line_bold
+                line_aux += line + ""
+                line = line_aux
+        if "[[" and "]]" in line:
+                word_encript = ""
+                line_aux = ""
+                word_encript = re.sub(r'\[\[(.*?)\]\]', lambda m: '[[' + md5_lowercase(m.group(1)) + ']]', line)
+                while "[[" and "]]" in word_encript:
+                    line_aux += word_encript[:word_encript.index("[[")]
+                    word_encript = word_encript[word_encript.index("[[")+2:]
+                    line_aux += word_encript[:word_encript.index("]]")]
+                    word_encript = word_encript[word_encript.index("]]")+2:]
+                line_aux += word_encript + ""
+                line = line_aux
         if line.startswith("-"):
             if not in_list:
                 html_str += "<ul>\n"
@@ -73,6 +88,8 @@ def markdown_to_html(markdown_str):
 if __name__ == "__main__":
     import sys
     import os.path
+    import hashlib
+    import re
 
     if len(sys.argv) < 3:
         sys.stderr.write("Usage: {} README.md README.html\n".format(sys.argv[0]))
