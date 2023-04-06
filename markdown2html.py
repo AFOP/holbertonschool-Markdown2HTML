@@ -18,6 +18,15 @@ def markdown_to_html(markdown_str):
     in_olist = False
     is_text = False
     for line in markdown_str.split("\n"):
+        line_bold = ""
+        if "**" in line:
+            while "**" in line:
+                line_bold += line[:line.index("**")] + "<b>"
+                line = line[line.index("**")+2:]
+                line_bold += line[:line.index("**")] + "</b>"
+                line = line[line.index("**")+2:]
+            line_bold += line + ""
+            line = line_bold
         if line.startswith("-"):
             if not in_list:
                 html_str += "<ul>\n"
