@@ -12,10 +12,20 @@ If the Markdown file doesn’t exist:
 print in STDER Missing <filename> and exit 1
 Otherwise, print nothing and exit 0
 """
+def markdown_to_html(markdown_str):
+    html_str = ""
+    for line in markdown_str.split("\n"):
+        if line.startswith("#"):
+            level = min(line.count("#"), 6)
+            html_str += f"<h{level}>{line[level+1:].strip()}</h{level}>"
+        else:
+            html_str += line
+        html_str += "\n"
+    return html_str
+
 if __name__ == "__main__":
     import sys
     import os.path
-    import markdown
 
     if len(sys.argv) < 3:
         sys.stderr.write("Usage: {} README.md README.html\n".format(sys.argv[0]))
@@ -28,7 +38,7 @@ if __name__ == "__main__":
     html_file = sys.argv[2]
     with open(md_file, 'r') as f:
         md = f.read()
-        html = markdown.markdown(md)
+        html = markdown_to_html(md)
         with open(html_file, 'w') as g:
             g.write(html)
     sys.exit(0)
