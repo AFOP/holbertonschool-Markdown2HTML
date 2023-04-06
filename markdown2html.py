@@ -24,4 +24,10 @@ if __name__ == "__main__":
     if not os.path.isfile(md_file):
         sys.stderr.write("Missing {}\n".format(md_file))
         sys.exit(1)
+    html_file = sys.argv[2]
+    with open(md_file, 'r') as f:
+        md = f.read()
+        html = markdown(md)
+        with open(html_file, 'w') as g:
+            g.write(html)
     sys.exit(0)
