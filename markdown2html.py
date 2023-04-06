@@ -16,6 +16,9 @@ def md5_lowercase(content):
     md5 = hashlib.md5(content.encode('utf-8')).hexdigest()
     return md5.lower()
 
+def quit_c(content):
+    return content.replace('c', '').replace('C', '')
+
 def markdown_to_html(markdown_str):
     html_str = ""
     in_list = False
@@ -44,6 +47,10 @@ def markdown_to_html(markdown_str):
                 word_encript = ""
                 word_encript = re.sub(r'\[\[(.*?)\]\]', lambda m: md5_lowercase(m.group(1)), line)
                 line = word_encript
+        if "((" and "))" in line:
+            word_encript = ""
+            word_encript = re.sub(r'\(\((.*?)\)\)', lambda m: quit_c(m.group(1)), line)
+            line = word_encript
         if line.startswith("-"):
             if not in_list:
                 html_str += "<ul>\n"
