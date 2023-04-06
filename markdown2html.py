@@ -37,7 +37,7 @@ def markdown_to_html(markdown_str):
                 html_str += "</ul>\n"
                 in_list = False
             elif in_olist:
-                html_str += "</ul>\n"
+                html_str += "</ol>\n"
                 in_olist = False
             html_str += line
     return html_str
