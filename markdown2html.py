@@ -15,7 +15,6 @@ Otherwise, print nothing and exit 0
 if __name__ == "__main__":
     import sys
     import os.path
-    import markdown
 
     if len(sys.argv) < 3:
         sys.stderr.write("Usage: {} README.md README.html\n".format(sys.argv[0]))
