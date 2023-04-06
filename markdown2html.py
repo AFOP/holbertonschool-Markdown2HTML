@@ -28,7 +28,7 @@ if __name__ == "__main__":
     html_file = sys.argv[2]
     with open(md_file, 'r') as f:
         md = f.read()
-        html = markdown.markdown(md)
+        html = markdown(md)
         with open(html_file, 'w') as g:
             g.write(html)
     sys.exit(0)
