@@ -42,15 +42,8 @@ def markdown_to_html(markdown_str):
                 line = line_aux
         if "[[" and "]]" in line:
                 word_encript = ""
-                line_aux = ""
-                word_encript = re.sub(r'\[\[(.*?)\]\]', lambda m: '[[' + md5_lowercase(m.group(1)) + ']]', line)
-                while "[[" and "]]" in word_encript:
-                    line_aux += word_encript[:word_encript.index("[[")]
-                    word_encript = word_encript[word_encript.index("[[")+2:]
-                    line_aux += word_encript[:word_encript.index("]]")]
-                    word_encript = word_encript[word_encript.index("]]")+2:]
-                line_aux += word_encript + ""
-                line = line_aux
+                word_encript = re.sub(r'\[\[(.*?)\]\]', lambda m: md5_lowercase(m.group(1)), line)
+                line = word_encript
         if line.startswith("-"):
             if not in_list:
                 html_str += "<ul>\n"

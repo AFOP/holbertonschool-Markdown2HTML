@@ -1,2 +1,2 @@
-But it's ((chicago))
+But it's [[chicago]]
 
