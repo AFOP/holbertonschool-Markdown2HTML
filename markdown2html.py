@@ -43,6 +43,15 @@ def markdown_to_html(markdown_str):
             level = min(line.count("#"), 6)
             html_str += f"<h{level}>{line[level+1:].strip()}</h{level}>\n"
         elif line.strip():
+            if "__" in line:
+                line_bold = ""
+                while "__" in line:
+                    line_bold += line[:line.index("__")] + "<em>"
+                    line = line[line.index("__")+2:]
+                    line_bold += line[:line.index("__")] + "</em>"
+                    line = line[line.index("__")+2:]
+                line_bold += line + ""
+                line = line_bold
             if not is_text:
                 html_str += f"<p>\n\t{line}\n"
                 is_text = True
