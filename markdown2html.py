@@ -14,13 +14,22 @@ Otherwise, print nothing and exit 0
 """
 def markdown_to_html(markdown_str):
     html_str = ""
+    in_list = False
     for line in markdown_str.split("\n"):
-        if line.startswith("#"):
+        if line.startswith("-"):
+            if not in_list:
+                html_str += "<ul>\n"
+                in_list = True
+            li_content = line[2:].strip()
+            html_str += f"\t<li>{li_content}</li>\n"
+        elif line.startswith("#"):
             level = min(line.count("#"), 6)
-            html_str += f"<h{level}>{line[level+1:].strip()}</h{level}>"
+            html_str += f"<h{level}>{line[level+1:].strip()}</h{level}>\n" 
         else:
+            if in_list:
+                html_str += "</ul>\n"
+                in_list = False
             html_str += line
-        html_str += "\n"
     return html_str
 
 if __name__ == "__main__":
