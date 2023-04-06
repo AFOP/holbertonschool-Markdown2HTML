@@ -16,6 +16,7 @@ def markdown_to_html(markdown_str):
     html_str = ""
     in_list = False
     in_olist = False
+    is_text = False
     for line in markdown_str.split("\n"):
         if line.startswith("-"):
             if not in_list:
@@ -31,7 +32,13 @@ def markdown_to_html(markdown_str):
             html_str += f"\t<li>{li_content}</li>\n"
         elif line.startswith("#"):
             level = min(line.count("#"), 6)
-            html_str += f"<h{level}>{line[level+1:].strip()}</h{level}>\n" 
+            html_str += f"<h{level}>{line[level+1:].strip()}</h{level}>\n"
+        elif line.strip():
+            if not is_text:
+                html_str += f"<p>\n\t{line}\n"
+                is_text = True
+            else:
+                html_str += f"\t\t<br>\n\t{line}\n"
         else:
             if in_list:
                 html_str += "</ul>\n"
@@ -39,6 +46,9 @@ def markdown_to_html(markdown_str):
             elif in_olist:
                 html_str += "</ol>\n"
                 in_olist = False
+            elif is_text:
+                html_str += "</p>\n"
+                is_text = False
             html_str += line
     return html_str
 
